@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @Builder
@@ -24,17 +27,16 @@ public class User {
 
     private String surname;
 
-    private String patronymic;
+    private String email;
 
+    @ElementCollection(targetClass = RoleType.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "roles", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PostType post;
+    @Builder.Default
+    private Set<RoleType> roles = new HashSet<>();
 
     private String password;
 
-    public enum PostType {
-        ROLE_MANAGER,
-        ROLE_MECHANIC,
-        ROLE_ADMIN
-    }
 
 }

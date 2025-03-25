@@ -1,26 +1,27 @@
 package com.example.servicesyncuserservice.dto.user;
 
-import com.example.servicesyncuserservice.entity.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponse {
+public class AuthResponse {
+
+    private Long id;
+
+    private String token;
+
+    private String refreshToken;
 
     private String username;
 
-    private String name;
+    private String email;
 
-    private String surname;
-
-    private Set<RoleType> roles;
-
+    private List<String> roles;
 }
