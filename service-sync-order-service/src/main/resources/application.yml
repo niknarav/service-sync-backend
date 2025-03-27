@@ -1,8 +1,4 @@
 spring:
-  data:
-    redis:
-      port: 6379
-      host: localhost
   jpa:
     properties:
       hibernate:
@@ -11,15 +7,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/sync-service-user-db
+    url: jdbc:postgresql://localhost:5432/sync-service-order-db
     username: postgres
     password: admin
     hikari:
       schema: sync-service-schema
       connection-timeout: 10000
-
-app:
-  jwt:
-    secret: "jwtSecret"
-    tokenExpiration: 60m
-    refreshTokenExpiration: 480m
