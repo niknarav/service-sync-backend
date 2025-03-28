@@ -2,10 +2,14 @@ package com.example.servicesyncuserservice.kafka.producer;
 
 import com.example.servicesyncuserservice.entity.User;
 import com.example.servicesyncuserservice.kafka.event.UserEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class UserEventProducer {
 
     private final KafkaTemplate<String, UserEvent> kafkaTemplate;
@@ -24,7 +28,20 @@ public class UserEventProducer {
                 .email(user.getEmail())
                 .roles(user.getRoles())
                 .build();
-        kafkaTemplate.send("user-events", user.getId().toString(), event);
+
+        CompletableFuture<SendResult<String, UserEvent>> future = kafkaTemplate.send("user-events", user.getId().toString(), event);
+
+        future.whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Failed to send message: {}", ex.getMessage());
+            } else {
+                log.info("Message sent successfully: topic={}, partition={}, offset={}, event={}",
+                        result.getRecordMetadata().topic(),
+                        result.getRecordMetadata().partition(),
+                        result.getRecordMetadata().offset(),
+                        event);
+            }
+        });
     }
 
     public void publishUserUpdated(User user) {

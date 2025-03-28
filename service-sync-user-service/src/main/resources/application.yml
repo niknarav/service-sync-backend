@@ -15,11 +15,19 @@ spring:
     username: postgres
     password: admin
     hikari:
-      schema: sync-service-schema
+      schema: sync-service-user-schema
       connection-timeout: 10000
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 
 app:
   jwt:
     secret: "jwtSecret"
     tokenExpiration: 60m
     refreshTokenExpiration: 480m
+  kafka:
+    kafkaMessageGroupId: "user-message-group-id"

@@ -8,6 +8,7 @@ import com.example.servicesyncuserservice.dto.user.UpsertUserRequest;
 import com.example.servicesyncuserservice.entity.RefreshToken;
 import com.example.servicesyncuserservice.entity.User;
 import com.example.servicesyncuserservice.exception.RefreshTokenException;
+import com.example.servicesyncuserservice.kafka.producer.UserEventProducer;
 import com.example.servicesyncuserservice.repository.UserRepository;
 import com.example.servicesyncuserservice.security.jwt.JwtUtils;
 import com.example.servicesyncuserservice.service.RefreshTokenService;
@@ -35,6 +36,8 @@ public class SecurityService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final UserEventProducer userEventProducer;
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -72,6 +75,8 @@ public class SecurityService {
                 .build();
 
         userRepository.save(user);
+
+        userEventProducer.publishUserCreated(user);
     }
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {

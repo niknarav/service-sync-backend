@@ -5,6 +5,7 @@ import com.example.servicesyncuserservice.dto.user.UserResponse;
 import com.example.servicesyncuserservice.dto.user.UserResponsesList;
 import com.example.servicesyncuserservice.entity.User;
 import com.example.servicesyncuserservice.exception.EntityNotFoundException;
+import com.example.servicesyncuserservice.kafka.producer.UserEventProducer;
 import com.example.servicesyncuserservice.mapper.UserMapper;
 import com.example.servicesyncuserservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

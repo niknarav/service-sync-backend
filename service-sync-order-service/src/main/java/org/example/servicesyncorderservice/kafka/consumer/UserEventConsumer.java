@@ -1,6 +1,7 @@
 package org.example.servicesyncorderservice.kafka.consumer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.servicesyncorderservice.kafka.event.UserEvent;
 import org.example.servicesyncorderservice.model.User;
 import org.example.servicesyncorderservice.repository.UserRepository;
@@ -8,6 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserEventConsumer {
 
@@ -15,6 +17,11 @@ public class UserEventConsumer {
 
     @KafkaListener(topics = "user-events", groupId = "order-service-group")
     public void consumeUserEvent(UserEvent event) {
+        if (event == null) {
+            log.error("Received null event");
+            return;
+        }
+        log.info("Received event: {}", event);;
         switch (event.getEventType()) {
             case "USER_CREATED":
                 createUser(event);
