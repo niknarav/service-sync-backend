@@ -28,6 +28,6 @@ app:
   jwt:
     secret: "jwtSecret"
     tokenExpiration: 60m
-    refreshTokenExpiration: 480m
+    refreshTokenExpiration: 10080m
   kafka:
     kafkaMessageGroupId: "user-message-group-id"

@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   jpa:
     properties:
       hibernate:
@@ -15,8 +17,13 @@ spring:
       connection-timeout: 10000
   kafka:
     bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 server:
   port: 8081
+
+
+app:
+  jwt:
+    secret: "jwtSecret"
+    tokenExpiration: 60m
+    refreshTokenExpiration: 480m
