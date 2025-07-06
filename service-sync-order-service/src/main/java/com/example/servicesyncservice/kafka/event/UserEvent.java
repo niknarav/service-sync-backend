@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.example.servicesyncservice.model.RoleType;
+import com.example.servicesyncservice.entity.RoleType;
 
 import java.util.Set;
 

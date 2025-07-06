@@ -9,17 +9,18 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/sync-service-order-db
+    url: jdbc:postgresql://postgres:5432/sync-service-order-db
     username: postgres
-    password: admin
+    password: postgres
     hikari:
-      schema: sync-service-order-schema
+      schema: sync_service_order_schema
       connection-timeout: 10000
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
+
 
 server:
-  port: 8081
+  port: 8082
 
 
 app:
@@ -27,3 +28,8 @@ app:
     secret: "jwtSecret"
     tokenExpiration: 60m
     refreshTokenExpiration: 480m
+
+logging:
+  exception-conversion-word:
+    packaging-data: false
+

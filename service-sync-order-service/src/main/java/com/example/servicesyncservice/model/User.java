@@ -1,5 +1,6 @@
 package com.example.servicesyncservice.model;
 
+import com.example.servicesyncservice.entity.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,8 @@ public class User {
     private String surname;
 
     private String email;
+
+    private String password;
 
     @ElementCollection(targetClass = RoleType.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))

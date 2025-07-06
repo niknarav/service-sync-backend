@@ -35,8 +35,4 @@ public class Car {
 
     private Integer mileage;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<ServiceHistory> serviceHistories = new ArrayList<>();
-
 }

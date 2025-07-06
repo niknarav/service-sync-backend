@@ -1,5 +1,6 @@
 package com.example.servicesyncservice.service.car;
 
+import com.example.servicesyncservice.dto.car.UpsertCarRequest;
 import com.example.servicesyncservice.exception.EntityNotFoundException;
 import com.example.servicesyncservice.mapper.car.CarMapper;
 import com.example.servicesyncservice.model.Car;
@@ -34,6 +35,13 @@ public class CarService {
         Car existedCar = carRepository.findById(car.getId()).orElseThrow(
                 () -> new EntityNotFoundException("Машина по id не была найдена id:" + car.getId()));
         BeanUtils.copyProperties(car, existedCar);
+        return carRepository.save(existedCar);
+    }
+
+    public Car updateCar(UpsertCarRequest request, Long id) {
+        Car existedCar = carRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Машина по id не была найдена id:" + id));
+        BeanUtils.copyProperties(request, existedCar);
         return carRepository.save(existedCar);
     }
 

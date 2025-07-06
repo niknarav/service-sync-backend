@@ -6,9 +6,11 @@ import com.example.servicesyncservice.dto.role.RoleRequest;
 import com.example.servicesyncservice.dto.simple.SimpleResponse;
 import com.example.servicesyncservice.dto.user.*;
 import com.example.servicesyncservice.entity.RoleType;
+import com.example.servicesyncservice.entity.User;
 import com.example.servicesyncservice.exception.AlreadyExistsException;
 import com.example.servicesyncservice.exception.EntityNotFoundException;
 import com.example.servicesyncservice.repository.UserRepository;
+import com.example.servicesyncservice.security.AppUserDetails;
 import com.example.servicesyncservice.security.SecurityService;
 import com.example.servicesyncservice.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/service-sync/user")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -30,6 +31,11 @@ public class UserController {
     private final SecurityService securityService;
 
     private final UserService userService;
+
+    @PostMapping("/create/admin")
+    public ResponseEntity<SimpleResponse> createAdmin() {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createAdmin());
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> authUser(@RequestBody LoginRequest request) {
@@ -63,18 +69,21 @@ public class UserController {
         return ResponseEntity.ok(new SimpleResponse("User logged out!"));
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getProfile(@AuthenticationPrincipal AppUserDetails userDetails) {
+        return ResponseEntity.ok(userService.findUserById(userDetails.getId()));
+    }
+
     @GetMapping("/get/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponsesList> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/get/role")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponsesList> getAllUsersByRole(@RequestParam(required = false) String role) {
         System.out.println("Fetching users by role: " + role);
         try {
-            if (role == null) {
+            if (role == null || role.isEmpty()) {
                 return ResponseEntity.ok(userService.getAllUsers());
             }
 
@@ -82,24 +91,23 @@ public class UserController {
             UserResponsesList userResponsesList = userService.getAllUsersByRole(roleType);
             return ResponseEntity.ok(userResponsesList);
         } catch (IllegalArgumentException e) {
+            System.err.println("Invalid role: " + role);
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @GetMapping("/get/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> update(@RequestBody UpsertUserRequest request, @PathVariable Long id) {
         return ResponseEntity.ok(userService.updateUser(request, id));
     }
 
     @PutMapping("/role/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateRole(@PathVariable Long id, @RequestBody RoleRequest request) {
         try {
             RoleType roleType = RoleType.valueOf(request.getRole().toUpperCase());

@@ -33,7 +33,7 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -57,9 +57,17 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests((auth) ->
                         auth.requestMatchers("/service-sync/user/register").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/service-sync/user/role/update/**").hasRole("ADMIN")
                         .requestMatchers("/service-sync/user/signin").permitAll()
-                                .requestMatchers("/service-sync/user/get/role").hasRole("ADMIN")
+                                .requestMatchers("/service-sync/user/create/admin").permitAll()
+                                .requestMatchers("/service-sync/user/refresh-token").permitAll()
+                                .requestMatchers("/service-sync/user/logout").authenticated()
+                                .requestMatchers("/service-sync/user/profile").authenticated()
+                                .requestMatchers("/service-sync/user/get/all").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/user/get/role").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/user/get/**").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/user/update/**").authenticated()
+                                .requestMatchers("/service-sync/user/delete/**").authenticated()
+                                .requestMatchers("/service-sync/user/role/update/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))

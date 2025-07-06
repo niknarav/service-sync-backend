@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -88,7 +89,9 @@ public class SecurityService {
                     User tokenOwner = userRepository.findById(userId)
                             .orElseThrow(() ->
                                     new RefreshTokenException("Ошибка при получении токена по id пользователя: " + userId));
-                    String token = jwtUtils.generateTokenFromUsername(tokenOwner.getUsername());
+                    String token = jwtUtils.generateTokenFromUsername(tokenOwner.getUsername(), tokenOwner.getRoles().stream().map(
+                            r -> new SimpleGrantedAuthority(r.name())
+                    ).toList());
 
                     return new RefreshTokenResponse(token, refreshTokenService.createRefreshToken(userId).getToken());
                 }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token не найден"));

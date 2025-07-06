@@ -6,6 +6,8 @@ import com.example.servicesyncservice.repository.MechanicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MechanicService {
@@ -15,6 +17,10 @@ public class MechanicService {
     public Mechanic findMechanicById(Long id) {
         return mechanicRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Механик по id не найден, id: " + id));
+    }
+
+    public List<Mechanic> findAllMechanics() {
+        return mechanicRepository.findAll();
     }
 
 }

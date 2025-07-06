@@ -34,13 +34,12 @@ public class OrderPartMapper {
                                 new EntityNotFoundException("Заказ по id не найден, id: " + request.getOrderId())))
                 .part(partService.findPartByName(request.getPartName()))
                 .quantityUsed(request.getQuantityUsed())
-                .totalCost(request.getTotalCost())
                 .build();
     }
 
     public OrderPartResponse entityToResponse(OrderPart orderPart) {
         return OrderPartResponse.builder()
-                .order(orderMapper.entityToResponse(orderPart.getOrder()))
+                .orderId(orderPart.getOrder().getId()) // просто ID заказа
                 .part(partMapper.entityToResponse(orderPart.getPart()))
                 .quantityUsed(orderPart.getQuantityUsed())
                 .totalCost(orderPart.getTotalCost())

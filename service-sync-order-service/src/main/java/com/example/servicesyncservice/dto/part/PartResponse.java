@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +19,6 @@ public class PartResponse {
 
     private Integer quantity;
 
-    private Double price;
+    private BigDecimal price;
 
 }

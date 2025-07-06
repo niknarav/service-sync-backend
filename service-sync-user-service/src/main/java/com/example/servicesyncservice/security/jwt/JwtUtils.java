@@ -4,9 +4,11 @@ import com.example.servicesyncservice.security.AppUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Date;
 
 @Component
@@ -20,13 +22,16 @@ public class JwtUtils {
     private Duration tokenExpiration;
 
     public String generateJwtToken(AppUserDetails userDetails) {
-        return generateTokenFromUsername(userDetails.getUsername());
+        return generateTokenFromUsername(userDetails.getUsername(), userDetails.getAuthorities());
     }
 
-    public String generateTokenFromUsername(String username) {
+    public String generateTokenFromUsername(String username, Collection<? extends GrantedAuthority> authorities) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
+                .claim("roles", authorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .toList())
                 .setExpiration(new Date(new Date().getTime() + tokenExpiration.toMillis()))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

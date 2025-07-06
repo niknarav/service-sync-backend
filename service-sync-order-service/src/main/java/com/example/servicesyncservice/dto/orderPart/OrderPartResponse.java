@@ -8,18 +8,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderPartResponse {
 
-    private OrderResponse order;
+    private Long orderId;
 
     private PartResponse part;
 
     private Integer quantityUsed;
 
-    private Double totalCost;
+    private BigDecimal totalCost;
 
 }

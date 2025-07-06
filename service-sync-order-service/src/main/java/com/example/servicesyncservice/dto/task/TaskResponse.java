@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class TaskResponse {
 
+    private Long id;
+
     private Long orderId;
 
     private MechanicResponse mechanic;

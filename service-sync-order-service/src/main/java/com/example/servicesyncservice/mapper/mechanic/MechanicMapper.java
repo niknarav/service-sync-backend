@@ -11,12 +11,11 @@ public class MechanicMapper {
 
     public MechanicResponse entityToResponse(Mechanic mechanic) {
         return MechanicResponse.builder()
+                .id(mechanic.getId())
                 .name(mechanic.getName())
                 .surname(mechanic.getSurname())
                 .username(mechanic.getUsername())
-                .specialization(mechanic.getSpecialization())
                 .email(mechanic.getEmail())
-                .isAvailable(mechanic.getIsAvailable())
                 .tasksId(mechanic.getTasks().stream()
                         .map(t -> t.getId())
                         .toList())

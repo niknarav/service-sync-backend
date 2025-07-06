@@ -1,8 +1,9 @@
 spring:
   data:
     redis:
+      host: redis
       port: 6379
-      host: localhost
+
   jpa:
     properties:
       hibernate:
@@ -10,19 +11,23 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/sync-service-user-db
+    url: jdbc:postgresql://postgres:5432/sync-service-user-db
     username: postgres
-    password: admin
+    password: postgres
     hikari:
-      schema: sync-service-user-schema
+      schema: sync_service_user_schema
       connection-timeout: 10000
+      maximum-pool-size: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
 
 app:
   jwt:
@@ -31,3 +36,6 @@ app:
     refreshTokenExpiration: 10080m
   kafka:
     kafkaMessageGroupId: "user-message-group-id"
+
+server:
+  port: 8081

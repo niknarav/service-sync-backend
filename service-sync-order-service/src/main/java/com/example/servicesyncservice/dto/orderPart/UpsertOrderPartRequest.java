@@ -17,5 +17,4 @@ public class UpsertOrderPartRequest {
 
     private Integer quantityUsed;
 
-    private Double totalCost;
 }

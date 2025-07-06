@@ -1,11 +1,13 @@
 package com.example.servicesyncservice.service.user;
 
+import com.example.servicesyncservice.dto.simple.SimpleResponse;
 import com.example.servicesyncservice.dto.user.UpsertUserRequest;
 import com.example.servicesyncservice.dto.user.UserResponse;
 import com.example.servicesyncservice.dto.user.UserResponsesList;
 import com.example.servicesyncservice.entity.RoleType;
 
 public interface UserService {
+    SimpleResponse createAdmin();
     UserResponsesList getAllUsers();
     UserResponse findUserById(Long id);
     UserResponse findUserByUsername(String username);
@@ -13,5 +15,4 @@ public interface UserService {
     void deleteUserById(Long id);
     UserResponsesList getAllUsersByRole(RoleType role);
     UserResponse updateRole(Long id, RoleType roleType);
-
 }

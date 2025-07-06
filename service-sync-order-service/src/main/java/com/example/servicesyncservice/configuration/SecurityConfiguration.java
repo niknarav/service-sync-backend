@@ -26,7 +26,25 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll())
+                        auth.requestMatchers("/service-sync/order/get/all").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/order/get/by-id/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/get/by/status").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/set/status/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/mechanic/get/all").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/order/task/update/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/update/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/get/by-car-vin").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/order/create-order").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/order/delete/**").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/service-sync/order/order-part/create").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/order-part/get/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/order-part/delete/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/add-task/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/get-tasks/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/task/delete/**").hasAnyRole("ADMIN", "MANAGER", "MECHANIC")
+                                .requestMatchers("/service-sync/order/mechanic/tasks/**").hasRole("MECHANIC")
+                                .requestMatchers("/service-sync/order/task/get/status/**").hasRole("MECHANIC")
+                                .requestMatchers("/service-sync/order/mechanic/profile").hasRole("MECHANIC"))
                 .exceptionHandling(configurer ->
                         configurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

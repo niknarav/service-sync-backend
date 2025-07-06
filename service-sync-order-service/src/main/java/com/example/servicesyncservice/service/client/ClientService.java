@@ -6,6 +6,7 @@ import com.example.servicesyncservice.mapper.client.ClientMapper;
 import com.example.servicesyncservice.model.Client;
 import com.example.servicesyncservice.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +33,12 @@ public class ClientService {
     public Client findByPhone(String phone) {
         return clientRepository.findByPhone(phone).
                 orElseThrow(() -> new EntityNotFoundException("Пользователь по номеру телефона не найден. Id: " + phone));
+    }
+
+    public Client updateClient(Long id, UpsertClientRequest request) {
+        Client client = findById(id);
+        BeanUtils.copyProperties(request, client);
+        return clientRepository.save(client);
     }
 
 }

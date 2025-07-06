@@ -8,7 +8,6 @@ public enum RoleType {
     ROLE_MECHANIC("ROLE_MECHANIC"),
     ROLE_GUEST("ROLE_GUEST");
 
-
     private final String value;
 
     RoleType(String value) {

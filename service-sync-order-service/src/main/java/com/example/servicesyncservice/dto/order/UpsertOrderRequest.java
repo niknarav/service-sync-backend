@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpsertOrderRequest {
 
-    private UpsertClientRequest clientRequest;
+    private UpsertClientRequest client;
 
-    private UpsertCarRequest carRequest;
+    private UpsertCarRequest car;
 
     private String description;
 

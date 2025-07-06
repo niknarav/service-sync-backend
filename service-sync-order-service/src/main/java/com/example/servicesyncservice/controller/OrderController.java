@@ -1,8 +1,6 @@
 package com.example.servicesyncservice.controller;
 
-import com.example.servicesyncservice.dto.order.OrderListResponse;
-import com.example.servicesyncservice.dto.order.OrderResponse;
-import com.example.servicesyncservice.dto.order.UpsertOrderRequest;
+import com.example.servicesyncservice.dto.order.*;
 import com.example.servicesyncservice.dto.orderStatus.OrderStatusRequest;
 import com.example.servicesyncservice.dto.simple.SimpleRequest;
 import com.example.servicesyncservice.dto.vin.VinRequest;
@@ -18,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/service-sync/order")
@@ -36,9 +35,16 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAll());
     }
 
+
     @GetMapping("/get/by-id/{id}")
     public ResponseEntity<OrderResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(orderMapper.entityToResponse(orderService.findOrderById(id)));
+    }
+
+    @GetMapping("/get/by/status")
+    public ResponseEntity<OrderListResponse> getByStatus(@RequestParam OrderStatus status) {
+        OrderStatusRequest request = new OrderStatusRequest(status);
+        return ResponseEntity.ok(orderService.getAllByStatus(request));
     }
 
     @PutMapping("/set/status/{id}")
@@ -46,8 +52,18 @@ public class OrderController {
         OrderStatus orderStatus = orderStatusRequest.getStatus();
         Order existedOrder = orderService.findOrderById(id);
         existedOrder.setStatus(orderStatus);
-        return ResponseEntity.ok(orderMapper.entityToResponse(orderRepository.save(existedOrder)));
+        Order order;
+        if(orderStatus == OrderStatus.COMPLETED) {
+            existedOrder.setUpdatedAt(LocalDateTime.now());
+            order = orderRepository.save(existedOrder);
+            System.out.println("hui");
+        } else {
+            order = orderRepository.save(existedOrder);
+        }
+        return ResponseEntity.ok(orderMapper.entityToResponse(order));
     }
+
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id, @RequestBody UpsertOrderRequest request) {

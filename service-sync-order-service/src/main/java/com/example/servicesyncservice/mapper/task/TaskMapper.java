@@ -44,6 +44,7 @@ public class TaskMapper {
     public TaskResponse entityToResponse(Task task) {
 
         return TaskResponse.builder()
+                .id(task.getId())
                 .orderId(task.getOrder() != null ? task.getOrder().getId() : null)
                 .mechanic(mechanicMapper.entityToResponse(task.getMechanic()))
                 .description(task.getDescription())

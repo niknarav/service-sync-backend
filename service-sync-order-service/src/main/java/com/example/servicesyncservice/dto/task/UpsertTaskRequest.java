@@ -16,8 +16,6 @@ public class UpsertTaskRequest {
 
     private String description;
 
-    private TaskStatus status;
-
     private Double cost;
 
 }

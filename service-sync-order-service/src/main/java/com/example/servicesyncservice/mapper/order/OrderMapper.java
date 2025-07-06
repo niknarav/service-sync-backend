@@ -3,9 +3,9 @@ package com.example.servicesyncservice.mapper.order;
 import com.example.servicesyncservice.dto.order.OrderListResponse;
 import com.example.servicesyncservice.dto.order.OrderResponse;
 import com.example.servicesyncservice.mapper.car.CarMapper;
-import com.example.servicesyncservice.mapper.client.ClientMapper;
 import com.example.servicesyncservice.mapper.orderPart.OrderPartMapper;
 import com.example.servicesyncservice.mapper.task.TaskMapper;
+import com.example.servicesyncservice.model.Client;
 import com.example.servicesyncservice.model.Order;
 import com.example.servicesyncservice.service.client.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,8 @@ import java.util.List;
 public class OrderMapper {
 
     private final ClientService clientService;
-
     private final CarMapper carMapper;
-
     private TaskMapper taskMapper;
-
     private OrderPartMapper orderPartMapper;
 
     @Autowired
@@ -37,10 +34,13 @@ public class OrderMapper {
     }
 
     public OrderResponse entityToResponse(Order order) {
+        Client client = clientService.findById(order.getClient().getId());
+
         return OrderResponse.builder()
-                .clientId(order.getClient() != null ? order.getClient().getId() : null)
-                .clientName(clientService.findById(order.getId()).getName())
-                .clientSurname(clientService.findById(order.getId()).getSurname())
+                .id(order.getId())
+                .clientId(order.getClient().getId())
+                .clientName(client.getName())
+                .clientSurname(client.getSurname())
                 .tasks(taskMapper.entityListToResponseList(order.getTasks()))
                 .parts(orderPartMapper.entityListToResponseList(order.getParts()))
                 .car(carMapper.entityToResponse(order.getCar()))
@@ -59,8 +59,4 @@ public class OrderMapper {
                         .toList())
                 .build();
     }
-
-
-
-
 }

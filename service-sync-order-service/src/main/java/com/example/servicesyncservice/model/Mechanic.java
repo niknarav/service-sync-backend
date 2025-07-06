@@ -17,8 +17,10 @@ import java.util.List;
 public class Mechanic {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    private Integer version;
 
     private String name;
 
@@ -26,11 +28,7 @@ public class Mechanic {
 
     private String username;
 
-    private String specialization;
-
     private String email;
-
-    private Boolean isAvailable;
 
     @OneToMany(mappedBy = "mechanic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;

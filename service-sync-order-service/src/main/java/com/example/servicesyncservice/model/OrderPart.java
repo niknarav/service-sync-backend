@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 @Builder
@@ -28,6 +30,6 @@ public class OrderPart {
 
     private Integer quantityUsed;
 
-    private Double totalCost;
+    private BigDecimal totalCost;
 
 }

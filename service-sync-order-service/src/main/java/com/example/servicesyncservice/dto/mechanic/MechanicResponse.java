@@ -14,17 +14,15 @@ import java.util.List;
 @Builder
 public class MechanicResponse {
 
+    private Long id;
+
     private String name;
 
     private String surname;
 
     private String username;
 
-    private String specialization;
-
     private String email;
-
-    private Boolean isAvailable;
 
     private List<Long> tasksId;
 
